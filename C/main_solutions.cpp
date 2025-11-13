@@ -59,11 +59,8 @@ void transpose_MPI(double* A, double* AT, int local_n, int global_n)
     delete[] recv_requests;
 }
 
-void transpose_datatype(double* A, double* AT, int local_n, int global_n)
-{
-}
-
-void transpose_alltoall(double* A, double* AT, int local_n, int global_n)
+// Transpose using MPI + OpenMP
+void transpose_mpiOpenMP(double* A, double* AT, int local_n, int global_n)
 {
 }
 
@@ -73,7 +70,7 @@ int tutorial_main(int argc, char* argv[])
 {
     // 1. Initialize
     
-    // 2. Perform an alltoall
+    // 2. Perform transpose using MPI and MPI + OpenMP
     
     // 3. Compare your methods
     

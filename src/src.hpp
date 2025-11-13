@@ -19,9 +19,8 @@ int MPI_Finalize();
 
 // Method to edit in tutorial
 int tutorial_main(int argc, char* argv[]);
-void transpose(double* A, double* AT, int local_n, int global_n);
-void transpose_alltoall(double* A, double* AT, int local_n, int global_n);
-void transpose_datatype(double* A, double* AT, int local_n, int global_n);
+void transpose_MPI(double* A, double* AT, int local_n, int global_n);
+void transpose_mpiOpenMP(double* A, double* AT, int local_n, int global_n);
 
 
 #ifdef __cplusplus
