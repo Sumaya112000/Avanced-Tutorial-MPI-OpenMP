@@ -30,10 +30,9 @@ int main(int argc, char* argv[])
         }
     }
 
-    transpose(A, AT, local_n, global_n);
+    transpose_MPI(A, AT, local_n, global_n);
 
-    transpose_datatype(A, AT_new, local_n, global_n);
-
+    transpose_mpiOpenMP(A, AT_new, local_n, global_n);
 
     for (int i = 0; i < local_n; i++)
     {
@@ -46,6 +45,7 @@ int main(int argc, char* argv[])
             }
         }
     }
+
     delete[] A;
     delete[] AT;
     delete[] AT_new;
@@ -58,4 +58,3 @@ int main(int argc, char* argv[])
 
 
 }
-

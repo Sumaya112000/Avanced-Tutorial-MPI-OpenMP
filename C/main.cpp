@@ -6,11 +6,79 @@
 // Transpose using MPI 
 void transpose_MPI(double* A, double* AT, int local_n, int global_n)
 { 
+     int rank, num_procs;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
+
+    double* send_buffer = new double[local_n*global_n];
+    double* recv_buffer = new double[local_n*global_n];
+    
+    MPI_Request* send_requests = new MPI_Request[num_procs];
+    MPI_Request* recv_requests = new MPI_Request[num_procs];
+
+    int tag = 1024;
+
+    int msg_size = local_n*local_n; // size of each msg
+
+    // Post receives
+    for (int i = 0; i < num_procs; i++)
+    {
+        MPI_Irecv(&(recv_buffer[i*msg_size]), msg_size, MPI_DOUBLE, i, tag, MPI_COMM_WORLD,
+                &(recv_requests[i]));
+    }
+
+    // Pack and send data
+    int ctr = 0;
+    for (int i = 0; i < num_procs; i++)
+    {
+        for (int col = i*local_n; col < (i+1)*local_n; col++)
+        {
+            for (int row = 0; row < local_n; row++)
+            {
+                send_buffer[ctr++] = A[row*global_n+col];
+            }
+        }
+        MPI_Isend(&(send_buffer[i*msg_size]), msg_size, MPI_DOUBLE, i, tag, MPI_COMM_WORLD,
+                &(send_requests[i]));
+    }
+    
+    // Wait for all communication to complete
+    MPI_Waitall(num_procs, send_requests, MPI_STATUSES_IGNORE);
+    MPI_Waitall(num_procs, recv_requests, MPI_STATUSES_IGNORE);
+
+    // Unpack data
+    for (int row = 0; row < local_n; row++)
+    {
+        for (int i = 0; i < num_procs; i++)
+        {
+            for (int col = 0; col < local_n; col++)
+            {
+                AT[row*global_n + i*local_n + col] = recv_buffer[i*local_n*local_n + row*local_n + col];
+            }
+        }
+    }
+
+    // Clean up
+    delete[] send_buffer;
+    delete[] recv_buffer;
+    delete[] send_requests;
+    delete[] recv_requests;
 }
 
 // Transpose using MPI + OpenMP
 void transpose_mpiOpenMP(double* A, double* AT, int local_n, int global_n)
 {
+    // Post receives - mpi only
+
+    // Pack data - openmp
+
+    // Send data - mpi only   
+    
+    // Wait for all communication to complete
+
+    // Unpack data - openmp
+
+    // Clean up
 }
 
 
