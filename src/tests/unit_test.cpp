@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <cmath>
 #include <vector>
-
+#include <time.h>
 int main(int argc, char* argv[])
 {
     PMPI_Init(&argc, &argv);
@@ -15,7 +15,6 @@ int main(int argc, char* argv[])
 
     int global_n = 1024;
     int local_n = global_n / num_procs;
-    int first_n = local_n * rank;
 
     double* A = new double[local_n * global_n];
     double* AT = new double[local_n * global_n];
